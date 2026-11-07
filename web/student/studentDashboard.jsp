@@ -5,6 +5,15 @@
         response.sendRedirect(request.getContextPath() + "/login.jsp");
         return;
     }
+    // Data belum dimuat: minta servlet ambil dari database
+    if (request.getAttribute("tickets") == null) {
+        request.getRequestDispatcher("/student/studentDashboardServlet").forward(request, response);
+        return;
+    }
+    int tickets = ((Integer) request.getAttribute("tickets")).intValue();
+    int upcoming = ((Integer) request.getAttribute("upcoming")).intValue();
+    int attended = ((Integer) request.getAttribute("attended")).intValue();
+    String ctx = request.getContextPath();
 %>
 <!DOCTYPE html>
 <html lang="en">
@@ -14,7 +23,7 @@
     <title>E-Hadir - Student Dashboard</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" rel="stylesheet">
-    <link href="<%=request.getContextPath()%>/css/ehadir.css" rel="stylesheet">
+    <link href="<%= ctx %>/css/ehadir.css" rel="stylesheet">
 </head>
 <body class="eh-ui-body">
 <jsp:include page="/student/layout/topbar.jsp"/>
@@ -31,25 +40,24 @@
             <div class="row g-3">
                 <div class="col-6 col-lg-4">
                     <div class="eh-card card p-3 text-center">
-                        <div class="eh-stat-number">2</div><div class="eh-muted">My Tickets</div>
+                        <div class="eh-stat-number"><%= tickets %></div><div class="eh-muted">My Tickets</div>
                     </div>
                 </div>
                 <div class="col-6 col-lg-4">
                     <div class="eh-card card p-3 text-center">
-                        <div class="eh-stat-number">6</div><div class="eh-muted">Upcoming Events</div>
+                        <div class="eh-stat-number"><%= upcoming %></div><div class="eh-muted">Upcoming Events</div>
                     </div>
                 </div>
                 <div class="col-12 col-lg-4">
                     <div class="eh-card card p-3 text-center">
-                        <div class="eh-stat-number">1</div><div class="eh-muted">Events Attended</div>
+                        <div class="eh-stat-number"><%= attended %></div><div class="eh-muted">Events Attended</div>
                     </div>
                 </div>
             </div>
 
-            <a href="<%= request.getContextPath() %>/student/eventList.jsp" class="btn btn-eh-primary mt-4">
+            <a href="<%= ctx %>/student/eventList.jsp" class="btn btn-eh-primary mt-4">
                 <i class="fa-solid fa-calendar-days me-2"></i>Browse Events
             </a>
-            <p class="eh-muted small mt-3">Nombor di atas data contoh. Nanti diambil dari database.</p>
         </div>
     </div>
 </div>
